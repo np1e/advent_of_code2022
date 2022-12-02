@@ -2,9 +2,10 @@ import sys
 import os
 
 
-choice_points = {'X': 1, 'Y': 2, 'Z': 3}
+choice_points = {'A': 1, 'B': 2, 'C': 3}
 choice_mappings = {'A': 'X', 'B': 'Y', 'C': 'Z'}
-rules = {'A': 'Y', 'B': 'Z', 'C': 'X'}
+rules = {'A': 'B', 'B': 'C', 'C': 'A'}
+inverse_rules = {'B': 'A', 'C': 'B', 'A': 'C'}
 mappings = {
     'A': 'Rock',
     'X': 'Rock',
@@ -25,16 +26,26 @@ def parse_input(filename):
     return games
 
 
+def get_choice(opponent_choice, expected_result):
+    if expected_result == 'X':
+        return inverse_rules[opponent_choice]
+    if expected_result == 'Y':
+        return opponent_choice
+    if expected_result == 'Z':
+        return rules[opponent_choice]
+
+
 def play_game(game):
     points = 0
     opponent_choice = game[0]
-    player_choice = game[1]
+    expected_result = game[1]
+    player_choice = get_choice(opponent_choice, expected_result)
     points += choice_points[player_choice]
 
     if rules[opponent_choice] == player_choice:
         points += 6
         print(f'Player wins by choosing {mappings[player_choice]} against {mappings[opponent_choice]}.')
-    elif choice_mappings[opponent_choice] == player_choice:
+    elif opponent_choice == player_choice:
         points += 3
         print(f'It\'s a draw: {mappings[player_choice]} against {mappings[opponent_choice]}.')
     else:
