@@ -39,6 +39,23 @@ def parse_input(filename):
     stacks = process_stacks(stacks, num_stacks)
     return stacks, instructions
 
+"""
+solution for part 1:
+crates are moved one after another (i.e. sequentially)
+"""
+def move_sequentially(amount, source_stack, target_stack):
+    for i in range(amount):
+        crate_to_move = source_stack.pop()
+        target_stack.append(crate_to_move)
+
+
+"""
+"""
+def move_block(amount, source_stack, target_stack):
+    crates_to_move = source_stack[len(source_stack)-amount:]
+    del source_stack[len(source_stack)-amount:]
+    target_stack.extend(crates_to_move)
+
 
 if __name__ == '__main__':
 
@@ -56,9 +73,7 @@ if __name__ == '__main__':
         amount = instruction[0]
         source_stack = stacks[instruction[1]-1]
         target_stack = stacks[instruction[2]-1]
-        for i in range(amount):
-            crate_to_move = source_stack.pop()
-            target_stack.append(crate_to_move)
+        move_block(amount, source_stack, target_stack)
 
     top_crates = [stack[-1] for stack in stacks]
     print(f'Crates on top of each stack: {"".join(top_crates)}')
